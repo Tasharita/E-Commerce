@@ -1,7 +1,8 @@
 const showcasecontainer=document.querySelector('.showcasecontainer')
 const singleproduct=document.querySelector('.single-product')
 const searchInput=document.getElementById('Search-bar')
-const searchButton=document.querySelector('.search')
+const searchButton=document.querySelector ('.search')
+const overlay=document.getElementById('overlay')
 
 const fetchProducts=async()=>{
     const response=await fetch('https://fakestoreapi.com/products')
@@ -39,6 +40,8 @@ const fetchSingle= async(id)=>{
     localStorage.setItem('singleproduct',JSON.stringify(data))
 
 }
+
+//search functionality
 const searchItem=async(search)=>{
      const response=await fetch('https://fakestoreapi.com/products')
     const data=await response.json()
@@ -70,4 +73,18 @@ const searchItem=async(search)=>{
 searchButton.addEventListener('click', () => {
   const searchProduct = searchInput.value;
   searchItem(searchProduct);
+});
+
+//show overlay when typing
+searchInput.addEventListener('focus',()=>{
+    overlay.style.display='block';
+});
+
+searchInput.addEventListener('blur',()=>{
+    overlay.style.display='none'
+})
+
+//hide overlay when you scroll
+window.addEventListener('scroll', () => {
+  overlay.style.display = 'none';
 });
