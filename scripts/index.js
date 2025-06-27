@@ -12,7 +12,7 @@ const fetchProducts=async()=>{
         const card=document.createElement('div')
         card.innerHTML=`
             <div>
-                <div class="card" style="width: 18rem;">
+                <div class="card" style="width: 18rem; height:600px">
                 <div class="image-container"><img src="${product.image}" class="card-img-top" alt="..."></div>
                     <div class="card-body">
                         <h5 class="card-title">${product.title}</h5>
