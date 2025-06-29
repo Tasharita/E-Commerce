@@ -157,5 +157,10 @@ function updateCart(index, action) {
   });
 }
 </script>
+<?php if (!empty($cart)): ?>
+  <div style="margin: 40px 0; text-align: center;">
+    <a href="checkout.php" class="btn btn-success btn-lg">Proceed to Checkout</a>
+  </div>
+<?php endif; ?>
 </body>
 </html>
