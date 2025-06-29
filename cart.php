@@ -1,20 +1,41 @@
+<?php
+session_start();
+
+// Initialize cart if it doesn't exist
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+// Handle actions (increase/decrease)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $index = $_POST['index'];
+    if ($_POST['action'] === 'increase') {
+        $_SESSION['cart'][$index]['quantity'] += 1;
+    } elseif ($_POST['action'] === 'decrease') {
+        if ($_SESSION['cart'][$index]['quantity'] > 1) {
+            $_SESSION['cart'][$index]['quantity'] -= 1;
+        } else {
+            array_splice($_SESSION['cart'], $index, 1);
+        }
+    }
+    header("Location: cart.php"); // Prevent form resubmission
+    exit();
+}
+
+$cart = $_SESSION['cart'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyDuka's Cart</title>
-    <link rel="stylesheet" href="cart.css">
-    <link rel="stylesheet" href="index.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <title>MyDuka's Cart</title>
+  <link rel="stylesheet" href="cart.css">
+  <link rel="stylesheet" href="index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-      <!-- From Uiverse.io by JulanDeAlb --> 
+  <nav class="navbar">
+     <!-- From Uiverse.io by JulanDeAlb --> 
     <label class="popup">
                 <input type="checkbox"/>
                     <div class="burger" tabindex="0">
@@ -84,12 +105,57 @@
 </svg></button>
     </div>
   </nav>
-  <h1><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-</svg> MyCart</h1>
-  <div id="cart-container"></div>
-  
-  <script src="./scripts/cart.js"></script>
-    
+
+  <h1>
+    <svg width="40" height="40" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+    </svg> MyCart
+  </h1>
+
+  <div id="cart-container">
+    <?php if (empty($cart)): ?>
+      <p>Your cart is empty.</p>
+    <?php else: ?>
+      <div class="row">
+        <?php foreach ($cart as $index => $item): ?>
+          <div class="card" style="width: 18rem;">
+            <div class="image-container">
+              <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="img-fluid"/>
+            </div>
+            <div class="card-body">
+              <h5><?= htmlspecialchars($item['name']) ?></h5>
+              <p>Quantity: <?= $item['quantity'] ?></p>
+              <p>Price: <?= $item['price'] ?> Ksh</p>
+              <p><strong>Total: <?= $item['quantity'] * $item['price'] ?> Ksh</strong></p>
+
+                <button class="add" onclick="updateCart(<?= $index ?>, 'increase')">+</button>
+                <button class="subtract" onclick="updateCart(<?= $index ?>, 'decrease')">-</button>
+                
+
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+  <script>
+function updateCart(index, action) {
+  const formData = new FormData();
+  formData.append("index", index);
+  formData.append("action", action);
+
+  fetch("cart.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const newCart = doc.getElementById("cart-container");
+    document.getElementById("cart-container").innerHTML = newCart.innerHTML;
+  });
+}
+</script>
 </body>
 </html>

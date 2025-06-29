@@ -77,16 +77,14 @@ window.addEventListener('scroll', () => {
 });
 
 //add to cart
-function addToCart(pname,price,image){
-    let cart=JSON.parse(localStorage.getItem("cart")) || [];
-
-    const existing= cart.find(item => item.name === pname);
-    if(existing){
-        existing.quantity +=1;
-    } else {
-        cart.push({name:pname, price:price, image:image, quantity:1});
-    }
-
-    localStorage.setItem("cart",JSON.stringify(cart));
-    window.location.assign('./cart.html');
+function addToCart(pname, price, image) {
+  fetch('add_to_cart.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `name=${encodeURIComponent(pname)}&price=${price}&image=${encodeURIComponent(image)}`
+  }).then(() => {
+    window.location.assign('cart.php');
+  });
 }
