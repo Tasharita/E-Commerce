@@ -35,15 +35,15 @@
                             </button>
                         </li>
                         <li>
-                            <button class="dropdown">
+                            <button class="dropdown" id="cat" value="Clothing">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                 </svg>
                                 
-                                <span className='fig'>Clothes</span>
+                                <span className='fig'>Clothing</span>
                             </button>
                         </li>
                         <li>
-                            <button>
+                            <button id="cat2" value="electronics">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                 </svg>
                                 <span className='fig'>Electronics</span>
@@ -55,7 +55,7 @@
                                 <button>
                                     <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                     </svg>
-                                    <span className='fig'>Your Cart</span>
+                                    <span className='fig' onclick="window.location.assign('./cart.php')">Your Cart</span>
                                 </button>
                             </li>
                         </ul>
@@ -85,6 +85,7 @@
 </svg></button>
     </div>
   </nav>
+  <div id="overlay"></div>
       <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
