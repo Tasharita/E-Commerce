@@ -27,44 +27,41 @@
                          <legend>Navigation</legend>
                         <ul>
                         <li>
-                            <button className='dropdown'>
+                            <button onclick="loadCategory('home')">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
-              
                                 </svg>
-                                <span className='fig'>Home</span>
+                                <span class='fig'>Home</span>
                             </button>
                         </li>
                         <li>
-                            <button class="dropdown">
+                            <button onclick="loadCategory('clothes')" class="dropdown">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                 </svg>
-                                
-                                <span className='fig'>Clothes</span>
+                                <span class='fig'>Clothes</span>
                             </button>
                         </li>
                         <li>
-                            <button>
+                            <button onclick="loadCategory('electronics')" class="dropdown">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                 </svg>
-                                <span className='fig'>Electronics</span>
+                                <span class='fig'>Electronics</span>
                             </button>
                         </li>
                             <hr/>
                             <li>
                                 <legend>Your Collection</legend>
-                                <button>
+                                <button onclick="viewCart()">
                                     <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                     </svg>
-                                    <span className='fig'>Your Cart</span>
+                                    <span class='fig'>Your Cart</span>
                                 </button>
                             </li>
                         </ul>
                     </nav>
             </label>
-    
 
     <div class="logo">MyDuka</div>
-    
+
     <div class="location">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
   <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
@@ -74,7 +71,7 @@
         <div class="line2"><strong>Kenya</strong></div>
       </div>
     </div>
-    
+
     <div class="search-container">
       <select>
         <option>All</option>
@@ -110,6 +107,9 @@
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
+      </div>
+      <div id="product-list" class="container mt-4">
+            <p>Select a category to see products</p>
       </div>
     <div class="showcasecontainer"></div>
     <script src="./scripts/index.js"></script>
