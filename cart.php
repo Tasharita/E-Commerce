@@ -34,6 +34,7 @@ $cart = $_SESSION['cart'];
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+  <!--Navbar-->
   <nav class="navbar">
      <!-- From Uiverse.io by JulanDeAlb --> 
     <label class="popup">
@@ -112,6 +113,7 @@ $cart = $_SESSION['cart'];
     </svg> MyCart
   </h1>
 
+  <!--Container for Cart-->
   <div id="cart-container">
     <?php if (empty($cart)): ?>
       <p>Your cart is empty.</p>
@@ -139,6 +141,7 @@ $cart = $_SESSION['cart'];
     <?php endif; ?>
   </div>
   <script>
+//Refresh Cart
 function updateCart(index, action) {
   const formData = new FormData();
   formData.append("index", index);
@@ -157,6 +160,7 @@ function updateCart(index, action) {
   });
 }
 </script>
+<!--Acceptance to Proceed to checkout-->
 <?php if (!empty($cart)): ?>
   <div style="margin: 40px 0; text-align: center;">
     <a href="checkout.php" class="btn btn-success btn-lg">Proceed to Checkout</a>
