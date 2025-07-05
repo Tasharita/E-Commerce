@@ -1,7 +1,7 @@
 <?php
-$hname='localhost:3305';
+$hname='localhost:3307';
 $uname='root';
-$pass='Crossword25.';
+$pass='';
 $db='ecommerce';
 
 $conn=mysqli_connect($hname,$uname,$pass,$db);

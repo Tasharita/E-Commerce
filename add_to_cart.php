@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php?msg=please_login');
+    exit();
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pname = $_POST['name'];
     $price = (float)$_POST['price'];
@@ -30,5 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     header('Location: cart.php');
-    exit();
+
+   echo '<pre>';
+   print_r($_SESSION);
+   exit();
 }
