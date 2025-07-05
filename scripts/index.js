@@ -11,23 +11,6 @@ const fetchProducts=async()=>{
     const response=await fetch('https://fakestoreapi.com/products')
     const data=await response.json()
     console.log(data)
-
-    // ADDING PRODUCTS FETCHED INTO OUR DB
-    
-    // fetch('products_into_db.php', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data)
-    // })
-    // .then(res => res.text())
-    // .then(result => {
-    //     console.log(result);
-    //     alert("Products saved to database!");
-    // });
-
-    //Displaying all products in a grid format
     data.forEach((product) => {
         const card=document.createElement('div')
         card.innerHTML=`
