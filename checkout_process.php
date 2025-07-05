@@ -31,6 +31,6 @@ foreach ($cart as $item) {
 // Clear cart after success
 unset($_SESSION['cart']);
 
-echo "<script>alert('Payment successful. Thank you!'); window.location.href='index.html';</script>";
+echo "<script>alert('Payment successful. Thank you!'); window.location.href='index.php';</script>";
 ?>
 

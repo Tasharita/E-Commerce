@@ -1,6 +1,13 @@
 <?php
 session_start();
 
+// Block access if not logged in
+if (!isset($_SESSION['user'])) {
+    $_SESSION['redirect_after_login'] = 'cart.php'; // remember the page
+    header('Location: login.php');
+    exit();
+}
+
 // Initialize cart if it doesn't exist
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
@@ -18,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             array_splice($_SESSION['cart'], $index, 1);
         }
     }
-    header("Location: cart.php"); // Prevent form resubmission
+    header("Location: index.php"); // Prevent form resubmission
     exit();
 }
 
@@ -47,7 +54,7 @@ $cart = $_SESSION['cart'];
                          <legend>Navigation</legend>
                         <ul>
                         <li>
-                            <button className='dropdown' onclick="window.location.assign('./index.html')">
+                            <button className='dropdown' onclick="window.location.assign('./index.php')">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
               
                                 </svg>
