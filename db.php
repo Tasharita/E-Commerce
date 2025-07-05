@@ -37,9 +37,9 @@ $sql3="CREATE TABLE orders (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );";
 
-if($conn->query($sql)===true){
-    echo "User Table Created";
-}else{
-    echo "Error Buddy".$conn->error;
-}
+// if($conn->query($sql)===true){
+//     echo "User Table Created";
+// }else{
+//     echo "Error Buddy".$conn->error;
+// }
 ?>
