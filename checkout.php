@@ -1,18 +1,25 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$cart = $_SESSION['cart'] ?? [];
+
+$total = 0;
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyDuka's Cart</title>
+    <title>Checkout</title>
+    <!-- Reuse styles from cart page -->
+    <link rel="stylesheet" href="cart.css">
     <link rel="stylesheet" href="index.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
+<!-- <?php include 'header.php'; ?> -->
+ <nav class="navbar">
       <!-- From Uiverse.io by JulanDeAlb --> 
     <label class="popup">
                 <input type="checkbox"/>
@@ -53,7 +60,7 @@
                                 <button>
                                     <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                     </svg>
-                                    <span className='fig'>Your Cart</span>
+                                    <span className='fig' onclick="window.location.assign('./cart.php')">Your Cart</span>
                                 </button>
                             </li>
                         </ul>
@@ -77,12 +84,52 @@
       <select>
         <option>All</option>
       </select>
-      <input type="text" placeholder="Search MyDuka" />
+      <input type="text" placeholder="Search MyDuka" id="Search-bar" />
       <button class="search"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
 </svg></button>
     </div>
   </nav>
-    
+
+<div class="container mt-5">
+    <div class="card p-4 shadow">
+        <h2 class="mb-4">Checkout Form</h2>
+
+        <?php if (!empty($cart)): ?>
+            <p><strong>Items in Cart:</strong></p>
+            <ul>
+                <?php foreach ($cart as $item): 
+                    $total += $item['price'] * $item['quantity'];
+                ?>
+                    <li><?= htmlspecialchars($item['name']) ?> - <?= $item['quantity'] ?> x <?= $item['price'] ?> Ksh</li>
+                <?php endforeach; ?>
+            </ul>
+
+            <p class="mt-3"><strong>Total to Pay:</strong> <?= $total ?> Ksh</p>
+
+            <form action="checkout_process.php" method="POST">
+                <div class="mb-3">
+                    <label for="amount_paid" class="form-label">Amount Paid (Ksh):</label>
+                    <input type="number" id="amount_paid" name="amount_paid" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="payment_method" class="form-label">Payment Method:</label>
+                    <select name="payment_method" id="payment_method" class="form-select" required>
+                        <option value="">--Select--</option>
+                        <option value="M-Pesa">M-Pesa</option>
+                        <option value="Card">Card</option>
+                        <option value="Cash">Cash</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Confirm Payment</button>
+            </form>
+        <?php else: ?>
+            <p>Your cart is empty.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
 </body>
 </html>
