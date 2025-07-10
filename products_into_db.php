@@ -10,8 +10,8 @@ if (is_array($data)) {
         $image = $conn->real_escape_string($product['image']);
         $rating = (float)$product['rating']['rate'];
 
-        $sql = "INSERT INTO products (title, price, image, rating) 
-                VALUES ('$title', $price, '$image', $rating)";
+        $sql = "INSERT INTO products (title, price, image, rating, category) 
+                VALUES ('$title', $price, '$image', $rating, $category)";
 
         if (!$conn->query($sql)) {
             echo "Error: " . $conn->error;
