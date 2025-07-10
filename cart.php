@@ -1,21 +1,41 @@
+<?php
+session_start();
+
+// Initialize cart if it doesn't exist
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+// Handle actions (increase/decrease)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $index = $_POST['index'];
+    if ($_POST['action'] === 'increase') {
+        $_SESSION['cart'][$index]['quantity'] += 1;
+    } elseif ($_POST['action'] === 'decrease') {
+        if ($_SESSION['cart'][$index]['quantity'] > 1) {
+            $_SESSION['cart'][$index]['quantity'] -= 1;
+        } else {
+            array_splice($_SESSION['cart'], $index, 1);
+        }
+    }
+    header("Location: cart.php"); // Prevent form resubmission
+    exit();
+}
+
+$cart = $_SESSION['cart'];
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyDuka</title>
-    <link rel="stylesheet" href="index.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <title>MyDuka's Cart</title>
+  <link rel="stylesheet" href="cart.css">
+  <link rel="stylesheet" href="index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
-    <nav class="navbar">
-      <!-- From Uiverse.io by JulanDeAlb --> 
+  <nav class="navbar">
+     <!-- From Uiverse.io by JulanDeAlb --> 
     <label class="popup">
                 <input type="checkbox"/>
                     <div class="burger" tabindex="0">
@@ -27,10 +47,11 @@
                          <legend>Navigation</legend>
                         <ul>
                         <li>
-                            <button onclick="loadCategory('home')">
+                            <button className='dropdown' onclick="window.location.assign('./index.html')">
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
+              
                                 </svg>
-                                <span class='fig'>Home</span>
+                                <span className='fig'>Home</span>
                             </button>
                         </li>
                         <li>
@@ -45,13 +66,13 @@
                             <button>
                                 <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                 </svg>
-                                <span class='fig'>Electronics</span>
+                                <span className='fig'>Electronics</span>
                             </button>
                         </li>
                             <hr/>
                             <li>
                                 <legend>Your Collection</legend>
-                                <button onclick="viewCart()">
+                                <button>
                                     <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
                                     </svg>
                                     <span className='fig'>Your Cart</span>
@@ -60,9 +81,10 @@
                         </ul>
                     </nav>
             </label>
+    
 
     <div class="logo">MyDuka</div>
-
+    
     <div class="location">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
   <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
@@ -72,49 +94,73 @@
         <div class="line2"><strong>Kenya</strong></div>
       </div>
     </div>
-
+    
     <div class="search-container">
       <select>
         <option>All</option>
       </select>
-      <input type="text" placeholder="Search MyDuka" id="Search-bar" />
+      <input type="text" placeholder="Search MyDuka" />
       <button class="search"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
 </svg></button>
     </div>
   </nav>
-  <div id="overlay"></div>
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="images/laptops.jpg" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item">
-            <img src="images/clothes.jpg" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item">
-            <img src="images/phone.jpg" class="d-block w-100" alt="...">
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
-      <div id="product-list" class="container mt-4">
-            <p>Select a category to see products</p>
-      </div>
-    <div class="showcasecontainer"></div>
-    <script src="./scripts/index.js"></script>
-</body>
 
+  <h1>
+    <svg width="40" height="40" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+    </svg> MyCart
+  </h1>
+
+  <div id="cart-container">
+    <?php if (empty($cart)): ?>
+      <p>Your cart is empty.</p>
+    <?php else: ?>
+      <div class="row">
+        <?php foreach ($cart as $index => $item): ?>
+          <div class="card" style="width: 18rem;">
+            <div class="image-container">
+              <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="img-fluid"/>
+            </div>
+            <div class="card-body">
+              <h5><?= htmlspecialchars($item['name']) ?></h5>
+              <p>Quantity: <?= $item['quantity'] ?></p>
+              <p>Price: <?= $item['price'] ?> Ksh</p>
+              <p><strong>Total: <?= $item['quantity'] * $item['price'] ?> Ksh</strong></p>
+
+                <button class="add" onclick="updateCart(<?= $index ?>, 'increase')">+</button>
+                <button class="subtract" onclick="updateCart(<?= $index ?>, 'decrease')">-</button>
+                
+
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+  <script>
+function updateCart(index, action) {
+  const formData = new FormData();
+  formData.append("index", index);
+  formData.append("action", action);
+
+  fetch("cart.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const newCart = doc.getElementById("cart-container");
+    document.getElementById("cart-container").innerHTML = newCart.innerHTML;
+  });
+}
+</script>
+<?php if (!empty($cart)): ?>
+  <div style="margin: 40px 0; text-align: center;">
+    <a href="checkout.php" class="btn btn-success btn-lg">Proceed to Checkout</a>
+  </div>
+<?php endif; ?>
+</body>
 </html>
