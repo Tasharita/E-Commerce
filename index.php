@@ -26,8 +26,8 @@
         <legend>Navigation</legend>
         <ul>
           <li><button className='dropdown'><span className='fig'>Home</span></button></li>
-          <li><button class="dropdown" id="cat" value="Clothing"><span className='fig'>Clothing</span></button></li>
-          <li><button id="cat2" value="electronics"><span className='fig'>Electronics</span></button></li>
+          <li><button class="dropdown" id="cat" value="Clothing"><span className='fig'  onclick="window.location.assign('./clothes.php')">Clothing</span></button></li>
+          <li><button id="cat2" value="electronics"><span className='fig' onclick="window.location.assign('./electronics.php')">Electronics</span></button></li>
           <hr/>
           <li>
             <legend>Your Collection</legend>
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <div class="search-container">
+    <div class="search-container"data-category="<?php echo $row['category']; ?>">
       <select>
         <option>All</option>
       </select>
@@ -104,7 +104,63 @@
     </button>
   </div>
 
-  <div class="showcasecontainer"></div>
+  <div class="showcasecontainer"data-category="<?php echo $row['category']; ?>"></div>
   <script src="./scripts/index.js"></script>
+  <script>
+document.getElementById("filter-clothing").addEventListener("click", function () {
+    const products = document.querySelectorAll(".searchcontainer");
+
+    products.forEach(function (product) {
+        const category = product.getAttribute("data-category");
+
+        if (category === "clothing") {
+            product.style.display = "block";
+        } else {
+            product.style.display = "none";
+        }
+    });
+});
+
+document.getElementById("show-all").addEventListener("click", function () {
+    const products = document.querySelectorAll(".searchcontainer");
+
+    products.forEach(function (product) {
+        product.style.display = "block";
+    });
+});
+</script>
+<script>
+document.getElementById("filter-electronics").addEventListener("click", function () {
+    const products = document.querySelectorAll(".searchcontainer");
+
+    products.forEach(function (product) {
+        const category = product.getAttribute("data-category");
+
+        if (category === "electronics") {
+            product.style.display = "block";
+        } else {
+            product.style.display = "none";
+        }
+    });
+});
+
+document.getElementById("show-all").addEventListener("click", function () {
+    const products = document.querySelectorAll(".searchcontainer");
+
+    products.forEach(function (product) {
+        product.style.display = "block";
+    });
+});
+</script>
+<script>
+document.addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("add-to-cart")) {
+        const productId = e.target.getAttribute("data-id");
+        alert("Add to cart clicked for product: " + productId);
+
+        //  Add your existing cart logic here (e.g. sending data to cart.php)
+    }
+});
+</script>
 </body>
 </html>
