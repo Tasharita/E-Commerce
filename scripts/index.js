@@ -140,4 +140,3 @@ category.addEventListener('click',()=>{
     const catProduct=category.value;
     categoryClick(catProduct);
 })
-
